@@ -1,0 +1,27 @@
+html,
+body,
+#main,
+#root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+}
+
+.app-container {
+    /* The image used */
+    background-image: url("../images/Scotch-Tasting.jpg");
+
+    height: 100%;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.non-auth-container {
+    width: 100%;
+    height: 100%;
+}
