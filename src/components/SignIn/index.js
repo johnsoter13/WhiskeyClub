@@ -9,9 +9,9 @@ import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 
 const SignInPage = () => (
-  <div className="signin-container">
-    <div className="signin">
-      <h1>Whiskey Club</h1>
+  <div className="auth-form-container">
+    <div className="auth-form">
+      <h1 className="auth-form-header">Whiskey Club</h1>
       <SignInForm />
       <PasswordForgetLink />
       <SignUpLink />

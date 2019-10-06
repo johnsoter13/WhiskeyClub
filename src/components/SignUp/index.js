@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
+import {Form, Button, Input} from '@momentum-ui/react';
 
 import { withFirebase } from '../Firebase';
 import { SignInLink } from '../SignIn';
@@ -16,10 +17,12 @@ const INITIAL_STATE = {
 };
 
 const SignUpPage = () => (
-  <div>
-    <h1>SignUp</h1>
-    <SignUpForm />
-    <SignInLink />
+  <div className="auth-form-container">
+    <div className="auth-form">
+      <h1 className="auth-form-header">Sign Up</h1>
+      <SignUpForm />
+      <SignInLink />
+    </div>
   </div>
 );
 
@@ -75,39 +78,39 @@ class SignUpFormBase extends Component {
       username === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
+      <Form onSubmit={this.onSubmit}>
+        <Input
           name="username"
           value={username}
           onChange={this.onChange}
           type="text"
           placeholder="Full Name"
         />
-        <input
+        <Input
           name="email"
           value={email}
           onChange={this.onChange}
           type="text"
           placeholder="Email Address"
         />
-        <input
+        <Input
           name="passwordOne"
           value={passwordOne}
           onChange={this.onChange}
           type="password"
           placeholder="Password"
         />
-        <input
+        <Input
           name="passwordTwo"
           value={passwordTwo}
           onChange={this.onChange}
           type="password"
           placeholder="Confirm Password"
         />
-        <button disabled={isInvalid} type="submit">Sign Up</button>
+        <Button disabled={isInvalid} type="submit">Sign Up</Button>
 
         {error && <p>{error.message}</p>}
-      </form>
+      </Form>
     );
   }
 }
