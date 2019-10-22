@@ -35,6 +35,8 @@ class Firebase {
     user = uid => this.db.ref(`users/${uid}`);
   
     users = () => this.db.ref('users');
+
+    doAddReview = (review) => this.db.ref('reviews').push(review);
 }
 
 export default Firebase;

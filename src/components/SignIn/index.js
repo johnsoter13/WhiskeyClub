@@ -9,12 +9,14 @@ import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 
 const SignInPage = () => (
-  <div className="auth-form-container">
-    <div className="auth-form">
-      <h1 className="auth-form-header">Whiskey Club</h1>
-      <SignInForm />
-      <PasswordForgetLink />
-      <SignUpLink />
+  <div className="auth-container">
+    <div className="auth-form-container">
+      <div className="auth-form">
+        <h1 className="auth-form-header">Whiskey Club</h1>
+        <SignInForm />
+        <PasswordForgetLink />
+        <SignUpLink />
+      </div>
     </div>
   </div>
 );

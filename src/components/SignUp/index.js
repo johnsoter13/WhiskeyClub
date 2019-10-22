@@ -17,11 +17,13 @@ const INITIAL_STATE = {
 };
 
 const SignUpPage = () => (
-  <div className="auth-form-container">
-    <div className="auth-form">
-      <h1 className="auth-form-header">Sign Up</h1>
-      <SignUpForm />
-      <SignInLink />
+  <div className="auth-container">
+    <div className="auth-form-container">
+      <div className="auth-form">
+        <h1 className="auth-form-header">Sign Up</h1>
+        <SignUpForm />
+        <SignInLink />
+      </div>
     </div>
   </div>
 );

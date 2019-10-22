@@ -9,10 +9,10 @@ body,
     background-color: #ffffff;
 }
 
-.app-container {
+.container {
     /* The image used */
     background-image: url("../images/Scotch-Tasting.jpg");
-
+    display: flex;
     height: 100%;
 
     /* Center and scale the image nicely */
