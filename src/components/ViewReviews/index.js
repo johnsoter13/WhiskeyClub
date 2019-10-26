@@ -19,6 +19,7 @@ const ViewReviews = () => (
 const INITIAL_STATE = {
     alcoholType: '',
     queryResults: [],
+    loading: false,
 };
 
 class ViewReviewsFormBase extends Component {
@@ -27,32 +28,46 @@ class ViewReviewsFormBase extends Component {
   
       this.state = {...INITIAL_STATE};
     }
+
+    componentDidMount() {
+      this.setState({ loading: true });
+
+      this.props.firebase.fetchReviewsRef().on('value', snapshot => {
+        const allResultsObject = snapshot.val();
+        const results = []
+        Object.keys(allResultsObject).map(key => (
+          Object.values(allResultsObject[key]).map(value => {
+            console.log(value);
+            return results.push(value)
+          })  
+        ));
+
+        this.setState({queryResults: results, loading: false});
+      });
+      
+    }
   
     onSubmit = event => {
-      const { alcoholType } = this.state;
-      this.props.firebase
-        .fetchReviews(alcoholType)
-        .then((results) => {
-          this.setState({queryResults: results}, () => {
-            console.log(this.state);
-          });
-        })
-        .catch(error => {
-          this.setState({error});
-        });
+      // const { alcoholType } = this.state;
+      // this.props.firebase
+      //   .fetchAllReviews(alcoholType)
+      //   .then((results) => {
+      //     this.setState({queryResults: results}, () => {
+      //     });
+      //   })
+      //   .catch(error => {
+      //     this.setState({error});
+      //   });
   
-      event.preventDefault();
+      // event.preventDefault();
     };
   
     renderReviewListItems = (results) => {
-      console.log(results);
       const resultListItems = []
 
       results.forEach((result) => {
         resultListItems.push(<ListItem label={result.review} />);
       });
-
-      console.log(resultListItems);
 
       return resultListItems;
     }
@@ -65,7 +80,7 @@ class ViewReviewsFormBase extends Component {
       const {alcoholType, queryResults, error} = this.state;
       const isInvalid = alcoholType === '';
       
-      console.log(this.state);
+      console.log(queryResults);
 
       return (
         <div>
