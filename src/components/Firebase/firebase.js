@@ -36,7 +36,18 @@ class Firebase {
   
     users = () => this.db.ref('users');
 
-    doAddReview = (review) => this.db.ref('reviews').push(review);
+    doAddReview = (review) => this.db.ref('reviews').child(review.alcoholType).push(review);
+
+    fetchReviews = (alcoholType) =>  {
+        const results = [];
+        this.db.ref('reviews').child(alcoholType).once('value', snapshot => {
+            snapshot.forEach(snap => {
+                results.push(snap.val());
+            });
+        });
+        return Promise.resolve(results);
+    };
+
 }
 
 export default Firebase;

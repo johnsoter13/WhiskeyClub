@@ -13,7 +13,7 @@ const HomePage = () => (
           <Button className="home-header-button"><Link to={ROUTES.POST_REVIEW}>Post a Review</Link></Button>
         </div>
         <div className="option-container">
-          <Button className="home-header-button">View Reviews</Button>
+          <Button className="home-header-button"><Link to={ROUTES.VIEW_REVIEWS}>View Reviews</Link></Button>
         </div>
       </div>
     </div>

@@ -7,9 +7,9 @@ import PasswordForgetPage from '../PasswordForget';
 import HomePage from '../Home';
 import AccountPage from '../Account';
 import { withAuthentication } from '../Session/index';
-
 import * as ROUTES from '../../constants/routes';
 import PostReview from '../PostReview';
+import ViewReviews from '../ViewReviews';
 
 const App = () => (
   <Router>
@@ -23,6 +23,7 @@ const App = () => (
         <Route path={ROUTES.HOME} component={HomePage} />
         <Route path={ROUTES.ACCOUNT} component={AccountPage} />
         <Route path={ROUTES.POST_REVIEW} component={PostReview} />
+        <Route path={ROUTES.VIEW_REVIEWS} component={ViewReviews} />
       </div>
   </Router>
 );

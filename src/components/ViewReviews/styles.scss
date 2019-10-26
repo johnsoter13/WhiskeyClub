@@ -1,0 +1,13 @@
+.view-review-container {
+  display: flex;
+  flex: 1 0 auto;
+  justify-content: center;
+  align-items: center;
+}
+
+.view-review {
+  width: 500px;
+  background: $md-mint-20;
+  padding: 10px;
+  border-radius: 10px;
+}

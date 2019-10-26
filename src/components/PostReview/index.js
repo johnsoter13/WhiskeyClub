@@ -33,8 +33,6 @@ class PostReviewFormBase extends Component {
   
     onSubmit = event => {
       const { alcoholType, alcoholRating, review } = this.state;
-      console.log(alcoholRating);
-      console.log(alcoholType);
       this.props.firebase
         .doAddReview({alcoholType, alcoholRating, review})
         .then(() => {
