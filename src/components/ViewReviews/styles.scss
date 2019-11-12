@@ -6,8 +6,10 @@
 }
 
 .view-review {
-  width: 500px;
   background: $md-mint-20;
+  min-width: 800px;
+  max-width: 800px;
   padding: 10px;
+  align-self: flex-start;
   border-radius: 10px;
 }

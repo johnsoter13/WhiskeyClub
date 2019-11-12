@@ -1,0 +1,26 @@
+.review-item-container {
+  display: flex;
+  white-space: normal;
+  height: auto;
+}
+
+.review-item-container .review-name {
+  justify-content: initial;
+  max-width: 100px;
+  min-width: 100px;
+}
+
+.review-item-container .review-rating {
+  max-width: 10px;
+}
+
+.review-item-container .review-details {
+  justify-content: initial;
+  min-width: 600px;
+  max-width: 600px;
+  padding-left: 50px;
+}
+
+.review-details {
+  word-break: break-all;
+}

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {List, ListItem, Button, Select, SelectOption} from '@momentum-ui/react';
+import {List, Select, SelectOption} from '@momentum-ui/react';
 import { compose } from 'recompose';
 
 import * as ROUTES from '../../constants/routes';
 import {withAuthorization} from '../Session';
 import { withFirebase } from '../Firebase';
+import ReviewItem from '../ReviewItem';
+
 
 const ViewReviews = () => (
     <div className="app-container">
@@ -34,40 +36,36 @@ class ViewReviewsFormBase extends Component {
 
       this.props.firebase.fetchReviewsRef().on('value', snapshot => {
         const allResultsObject = snapshot.val();
-        const results = []
-        Object.keys(allResultsObject).map(key => (
+        const results = {};
+        Object.keys(allResultsObject).map(key => {
+          results[key] = [];
           Object.values(allResultsObject[key]).map(value => {
-            console.log(value);
-            return results.push(value)
-          })  
-        ));
+            return results[key].push(value)
+          }) 
+          return results; 
+        });
 
         this.setState({queryResults: results, loading: false});
       });
       
     }
   
-    onSubmit = event => {
-      // const { alcoholType } = this.state;
-      // this.props.firebase
-      //   .fetchAllReviews(alcoholType)
-      //   .then((results) => {
-      //     this.setState({queryResults: results}, () => {
-      //     });
-      //   })
-      //   .catch(error => {
-      //     this.setState({error});
-      //   });
-  
-      // event.preventDefault();
-    };
-  
-    renderReviewListItems = (results) => {
+    renderReviewListItems = (alcoholType, results) => {
       const resultListItems = []
 
-      results.forEach((result) => {
-        resultListItems.push(<ListItem label={result.review} />);
-      });
+      if(!results || (alcoholType !== '' && alcoholType !== 'all' && !results[alcoholType])) {
+        return null;
+      }
+
+      if(!alcoholType || alcoholType === 'all') {
+        Object.keys(results).map(key => (
+          Object.values(results[key]).map(value => (
+            resultListItems.push(<ReviewItem reviewName={'John'} reviewRating={value.alcoholRating} reviewDetails={value.review} />)
+          ))
+        ))
+      } else {
+        results[alcoholType].map(value => resultListItems.push(<ReviewItem reviewName={'John'} reviewRating={value.alcoholRating} reviewDetails={value.review} />))
+      }
 
       return resultListItems;
     }
@@ -77,13 +75,9 @@ class ViewReviewsFormBase extends Component {
     };
   
     render() {
-      const {alcoholType, queryResults, error} = this.state;
-      const isInvalid = alcoholType === '';
-      
-      console.log(queryResults);
+      const {alcoholType, queryResults} = this.state;
 
       return (
-        <div>
           <div className="view-review">
             <Select className="view-review-dropdown-button" defaultValue="Filter Reviews By Alcohol" onSelect={(e) => this.selectOnChange(e, 'alcoholType')} >
               <SelectOption value='all' label='All' />
@@ -94,21 +88,15 @@ class ViewReviewsFormBase extends Component {
               <SelectOption value='gin' label='Gin' />
               <SelectOption value='cordial' label='Cordial' />
             </Select>
-            <Button disabled={isInvalid} onClick={this.onSubmit}>
-              View Reviews
-            </Button>
-
-            {error && <p>{error.message}</p>}
+        
+              {queryResults &&
+              <List>
+                {this.renderReviewListItems(alcoholType, queryResults)}
+              </List>
+              }
+          
           </div>
-          <div>
-            {queryResults &&
-            <List focusFirst>
-              {this.renderReviewListItems(queryResults)}
-            </List>
-            }
-          </div>
-        </div>
-      );
+        );
     }
   }
 
