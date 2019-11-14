@@ -4,10 +4,12 @@ import {Button} from '@momentum-ui/react';
 
 import * as ROUTES from '../../constants/routes';
 import {withAuthorization} from '../Session';
+import SignOutButton from '../SignOut';
 
 const HomePage = () => (
     <div className="app-container">
       <h1 className="home-header"><Link to={ROUTES.HOME}>Whiskey Club</Link></h1>
+      <SignOutButton />
       <div className="home-content-container">
         <div className="option-container">
           <Button className="home-header-button"><Link to={ROUTES.POST_REVIEW}>Post a Review</Link></Button>

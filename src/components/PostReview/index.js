@@ -32,18 +32,19 @@ class PostReviewFormBase extends Component {
     }
   
     onSubmit = event => {
+      event.preventDefault();
+
       const { alcoholType, alcoholRating, review } = this.state;
       this.props.firebase
-        .user()
         .doAddReview({alcoholType, alcoholRating, review})
         .then(() => {
           this.setState({ ...INITIAL_STATE });
         })
         .catch(error => {
+          console.log(error);
           this.setState({ error });
         });
   
-      event.preventDefault();
     };
   
     selectOnChange = (event, name) => {
