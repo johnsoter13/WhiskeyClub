@@ -4,7 +4,7 @@ import {Button} from '@momentum-ui/react';
 import { withFirebase } from '../Firebase';
 
 const SignOutButton = ({ firebase }) => (
-  <Button type="button" onClick={firebase.doSignOut}>
+  <Button className="signout-button" type="button" onClick={firebase.doSignOut}>
     Sign Out
   </Button>
 );

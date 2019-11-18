@@ -7,11 +7,24 @@
 
 .post-review {
   width: 500px;
-  background: $md-mint-20;
+  background: $md-orange-10;
   padding: 10px;
   border-radius: 10px;
 }
 
-.post-review-dropdown-button .md-button {
-  min-width: 210px;
+.post-review-dropdown-button {
+  flex-grow: 1;
+
+  & .md-button {
+    min-width: 210px;
+  }
+}
+
+.select-container,
+.submit-button-container {
+  display: flex;
+}
+
+.submit-button {
+  flex-grow: 1;
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
 import SignUpPage from '../SignUp';
 import SignInPage from '../SignIn';
@@ -21,10 +21,11 @@ const App = () => (
             path={ROUTES.PASSWORD_FORGET}
             component={PasswordForgetPage}
           />
-          <Route path={ROUTES.HOME} component={HomePage} />
+          <Route exact path={ROUTES.HOME} component={HomePage} />
           <Route path={ROUTES.ACCOUNT} component={AccountPage} />
           <Route path={ROUTES.POST_REVIEW} component={PostReview} />
           <Route path={ROUTES.VIEW_REVIEWS} component={ViewReviews} />
+          <Redirect to='/'/>
         </Switch>
       </div>
   </Router>

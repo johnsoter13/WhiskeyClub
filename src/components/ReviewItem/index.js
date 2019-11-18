@@ -1,17 +1,23 @@
 import React from 'react';
-import {ListItem, ListItemSection} from '@momentum-ui/react';
+import {ListItem} from '@momentum-ui/react';
 
-const ReviewItem = ({reviewName, reviewRating, reviewDetails}) => (
-  <ListItem className="review-item-container">
-    <ListItemSection className="review-name" position='left'>
+const ReviewItem = ({reviewName, reviewRating, reviewDetails, reviewBrand, reviewAlcoholName}) => (
+  <ListItem key={`${reviewName}-review-${reviewAlcoholName}`} className="review-item-container">
+    <div className="review-name">
       {reviewName}
-    </ListItemSection>
-    <ListItemSection className="review-rating" position='center'>
+    </div>
+    <div className="review-brand">
+      {reviewBrand}
+    </div>
+    <div className="review-alcohol-name">
+      {reviewAlcoholName}
+    </div>
+    <div className="review-rating">
       {reviewRating}
-    </ListItemSection>
-    <ListItemSection className="review-details" position='right'>
+    </div>
+    <div className="review-details">
       {reviewDetails}
-    </ListItemSection>
+    </div>
   </ListItem>
 );
 

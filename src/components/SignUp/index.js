@@ -6,7 +6,7 @@ import {Form, Button, Input} from '@momentum-ui/react';
 import { withFirebase } from '../Firebase';
 import { SignInLink } from '../SignIn';
 import * as ROUTES from '../../constants/routes';
-
+import {withAuthorization} from '../Session';
 
 const INITIAL_STATE = {
     username: '',
@@ -45,11 +45,11 @@ class SignUpFormBase extends Component {
         return this.props.firebase
           .user(authUser.user.uid)
           .set({
-            username,
             email,
+            displayName: username,
           });
       })
-      .then(authUser => {
+      .then(() => {
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.HOME);
       })
@@ -109,7 +109,11 @@ class SignUpFormBase extends Component {
           type="password"
           placeholder="Confirm Password"
         />
-        <Button disabled={isInvalid} type="submit">Sign Up</Button>
+          <div className="submit-button-container">
+            <Button className="submit-button" disabled={isInvalid} type="submit">
+              Sign Up
+            </Button>
+          </div>
 
         {error && <p>{error.message}</p>}
       </Form>
@@ -123,9 +127,12 @@ const SignUpLink = () => (
   </p>
 );
 
+const condition = authUser => !authUser;
+
 const SignUpForm = compose(
   withRouter,
   withFirebase,
+  withAuthorization(condition, ROUTES.HOME)
 )(SignUpFormBase);
 
 export default SignUpPage;

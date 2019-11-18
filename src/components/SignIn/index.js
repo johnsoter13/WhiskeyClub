@@ -7,6 +7,7 @@ import { PasswordForgetLink } from '../PasswordForget';
 import { SignUpLink } from '../SignUp';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
+import {withAuthorization} from '../Session';
 
 const SignInPage = () => (
   <div className="auth-container">
@@ -76,10 +77,11 @@ class SignInFormBase extends Component {
           type="password"
           placeholder="Password"
         />
-        <Button disabled={isInvalid} type="submit">
-          Sign In
-        </Button>
-
+        <div className="submit-button-container">
+          <Button className="submit-button" disabled={isInvalid} type="submit">
+            Sign In
+          </Button>
+        </div>
         {error && <p>{error.message}</p>}
       </Form>
     );
@@ -92,9 +94,12 @@ const SignInLink = () => (
   </p>
 );
 
+const condition = authUser => !authUser;
+
 const SignInForm = compose(
   withRouter,
   withFirebase,
+  withAuthorization(condition, ROUTES.HOME)
 )(SignInFormBase);
 
 export default SignInPage;

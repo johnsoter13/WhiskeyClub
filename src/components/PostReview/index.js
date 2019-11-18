@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import {Link, withRouter} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import {Form, Button, Input, Select, SelectOption} from '@momentum-ui/react';
 import { compose } from 'recompose';
 
 import * as ROUTES from '../../constants/routes';
 import {withAuthorization} from '../Session';
 import { withFirebase } from '../Firebase';
+import Navigation from '../Navigation';
 
 const PostReview = () => (
     <div className="app-container">
-      <h1 className="home-header"><Link to={ROUTES.HOME}>Whiskey Club</Link></h1>
+      <Navigation />
       <div className="post-review-container">
         <div className="post-review">
           <PostReviewForm />
@@ -22,6 +23,8 @@ const INITIAL_STATE = {
     alcoholType: '',
     alcoholRating: '',
     review: '',
+    alcoholName: '',
+    alcoholBrand: ''
 };
 
 class PostReviewFormBase extends Component {
@@ -33,15 +36,15 @@ class PostReviewFormBase extends Component {
   
     onSubmit = event => {
       event.preventDefault();
+      let username = "Guest"
 
-      const { alcoholType, alcoholRating, review } = this.state;
+      const { alcoholType, alcoholRating, review, alcoholName, alcoholBrand} = this.state;
       this.props.firebase
-        .doAddReview({alcoholType, alcoholRating, review})
+        .doAddReview({alcoholType, alcoholRating, alcoholName, alcoholBrand, review, username})
         .then(() => {
           this.setState({ ...INITIAL_STATE });
         })
         .catch(error => {
-          console.log(error);
           this.setState({ error });
         });
   
@@ -57,28 +60,44 @@ class PostReviewFormBase extends Component {
 
   
     render() {
-      const { alcoholType, alcoholRating, review, error } = this.state;
+      const { alcoholType, alcoholRating, review, alcoholName, alcoholBrand, error } = this.state;
   
-      const isInvalid = alcoholType === '' || alcoholRating === '';
+      const isInvalid = alcoholType === '' || alcoholRating === '' || alcoholName === '' || alcoholBrand === '';
               
       return (
-        <Form onSubmit={this.onSubmit}>
-          <Select className="post-review-dropdown-button" defaultValue="Select Alcohol Type" onSelect={(e) => this.selectOnChange(e, 'alcoholType')} >
-            <SelectOption value='whiskey' label='Whiskey' />
-            <SelectOption value='vodka' label='Vodka'  />
-            <SelectOption value='rum' label='Rum' />
-            <SelectOption value='tequila' label='Tequila' />
-            <SelectOption value='gin' label='Gin' />
-            <SelectOption value='cordial' label='Cordial' />
-          </Select>
-          <Select className="post-review-dropdown-button" defaultValue="Select Rating" onSelect={(e) => this.selectOnChange(e, 'alcoholRating')} >
-            <SelectOption value='0' label='0 Star' />
-            <SelectOption value='1' label='1 Star'  />
-            <SelectOption value='2' label='2 Star' />
-            <SelectOption value='3' label='3 Star' />
-            <SelectOption value='4' label='4 Star' />
-            <SelectOption value='5' label='5 Star' />
-          </Select>
+        <Form name="post-review-form" onSubmit={this.onSubmit}>
+          <div className="select-container">
+            <Select className="post-review-dropdown-button" defaultValue="Select Alcohol Type" onSelect={(e) => this.selectOnChange(e, 'alcoholType')} >
+              <SelectOption value='whiskey' label='Whiskey' />
+              <SelectOption value='vodka' label='Vodka'  />
+              <SelectOption value='rum' label='Rum' />
+              <SelectOption value='tequila' label='Tequila' />
+              <SelectOption value='gin' label='Gin' />
+              <SelectOption value='cordial' label='Cordial' />
+            </Select>
+            <Select className="post-review-dropdown-button" defaultValue="Select Rating" onSelect={(e) => this.selectOnChange(e, 'alcoholRating')} >
+              <SelectOption value='0' label='0 Star' />
+              <SelectOption value='1' label='1 Star'  />
+              <SelectOption value='2' label='2 Star' />
+              <SelectOption value='3' label='3 Star' />
+              <SelectOption value='4' label='4 Star' />
+              <SelectOption value='5' label='5 Star' />
+            </Select>
+          </div>
+          <Input 
+            name="alcoholBrand"
+            value={alcoholBrand}
+            onChange={this.onChange}
+            type="text"
+            placeholder="Alcohol Brand" 
+          />
+          <Input 
+            name="alcoholName"
+            value={alcoholName}
+            onChange={this.onChange}
+            type="text"
+            placeholder="Alcohol Name" 
+          />
           <Input 
             name="review"
             value={review}
@@ -87,10 +106,11 @@ class PostReviewFormBase extends Component {
             multiline
             placeholder="Write your review here!" 
           />
-          <Button disabled={isInvalid} type="submit">
-            Submit Rating
-          </Button>
-  
+          <div className="submit-button-container">
+            <Button className="submit-button" disabled={isInvalid} type="submit">
+              Submit Rating
+            </Button>
+          </div>
           {error && <p>{error.message}</p>}
         </Form>
       );
@@ -102,7 +122,7 @@ const condition = authUser => !!authUser;
 const PostReviewForm = compose(
   withRouter,
   withFirebase,
-  withAuthorization(condition)
+  withAuthorization(condition, ROUTES.SIGN_IN)
 )(PostReviewFormBase);
 
 export default PostReview;

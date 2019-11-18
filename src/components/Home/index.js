@@ -1,21 +1,24 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import {Button} from '@momentum-ui/react';
+import {withRouter} from 'react-router-dom';
+import { compose } from 'recompose';
 
 import * as ROUTES from '../../constants/routes';
 import {withAuthorization} from '../Session';
-import SignOutButton from '../SignOut';
+import Navigation from '../Navigation';
 
-const HomePage = () => (
+const HomePage = ({history}) => (
     <div className="app-container">
-      <h1 className="home-header"><Link to={ROUTES.HOME}>Whiskey Club</Link></h1>
-      <SignOutButton />
+      <Navigation />
       <div className="home-content-container">
-        <div className="option-container">
-          <Button className="home-header-button"><Link to={ROUTES.POST_REVIEW}>Post a Review</Link></Button>
+        <div className="option-container" onClick={() => {
+          history.push(ROUTES.POST_REVIEW);
+        }}>
+           <h2 className="option-header">Post a Review</h2>
         </div>
-        <div className="option-container">
-          <Button className="home-header-button"><Link to={ROUTES.VIEW_REVIEWS}>View Reviews</Link></Button>
+        <div className="option-container" onClick={() => {
+          history.push(ROUTES.VIEW_REVIEWS);
+        }}>
+          <h2 className="option-header">View Reviews</h2>
         </div>
       </div>
     </div>
@@ -23,4 +26,7 @@ const HomePage = () => (
 
 const condition = authUser => !!authUser;
 
-export default withAuthorization(condition)(HomePage);
+export default compose(
+  withRouter,
+  withAuthorization(condition, ROUTES.SIGN_IN)
+)(HomePage);

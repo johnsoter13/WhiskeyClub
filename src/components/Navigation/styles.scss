@@ -1,0 +1,20 @@
+.navigation-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.signout-button {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.home-header {
+  text-align: center;
+  margin-top: 5px;
+  text-shadow: -2px -2px 0 $md-black-100;
+
+  & a {
+    color: $md-white-100;
+  }
+}

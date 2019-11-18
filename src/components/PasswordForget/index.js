@@ -4,6 +4,7 @@ import {Form, Button, Input} from '@momentum-ui/react';
 
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
+import {withAuthorization} from '../Session';
 
 const PasswordForgetPage = () => (
   <div>
@@ -73,7 +74,9 @@ const PasswordForgetLink = () => (
   </p>
 );
 
-export default PasswordForgetPage;
+const condition = authUser => !authUser;
+
+export default withAuthorization(condition, ROUTES.HOME)(PasswordForgetPage);
 
 const PasswordForgetForm = withFirebase(PasswordForgetFormBase);
 

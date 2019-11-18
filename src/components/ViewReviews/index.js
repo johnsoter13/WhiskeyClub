@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import {Link, withRouter} from 'react-router-dom';
-import {List, Select, SelectOption} from '@momentum-ui/react';
+import {withRouter} from 'react-router-dom';
+import {List, Select, SelectOption, ListSeparator} from '@momentum-ui/react';
 import { compose } from 'recompose';
 
 import * as ROUTES from '../../constants/routes';
 import {withAuthorization} from '../Session';
 import { withFirebase } from '../Firebase';
 import ReviewItem from '../ReviewItem';
-
+import Navigation from '../Navigation';
 
 const ViewReviews = () => (
     <div className="app-container">
-      <h1 className="home-header"><Link to={ROUTES.HOME}>Whiskey Club</Link></h1>
+      <Navigation />
       <div className="view-review-container">
         <ViewReviewForm />
       </div>
@@ -60,11 +60,11 @@ class ViewReviewsFormBase extends Component {
       if(!alcoholType || alcoholType === 'all') {
         Object.keys(results).map(key => (
           Object.values(results[key]).map(value => (
-            resultListItems.push(<ReviewItem reviewName={'John'} reviewRating={value.alcoholRating} reviewDetails={value.review} />)
+            resultListItems.push(<ReviewItem reviewName={value.username} reviewRating={value.alcoholRating} reviewDetails={value.review} reviewBrand={value.alcoholBrand} reviewAlcoholName={value.alcoholName} />)
           ))
         ))
       } else {
-        results[alcoholType].map(value => resultListItems.push(<ReviewItem reviewName={'John'} reviewRating={value.alcoholRating} reviewDetails={value.review} />))
+        results[alcoholType].map(value => resultListItems.push(<ReviewItem reviewName={value.username} reviewRating={value.alcoholRating} reviewDetails={value.review} reviewBrand={value.alcoholBrand} reviewAlcoholName={value.alcoholName} />))
       }
 
       return resultListItems;
@@ -90,7 +90,11 @@ class ViewReviewsFormBase extends Component {
             </Select>
         
               {queryResults &&
-              <List>
+              <List focusFirst={false}>
+                <ReviewItem reviewName={'Author'} reviewRating={'Rating (0-5)'} reviewDetails={'Review'} reviewBrand={'Brand'} reviewAlcoholName={'Alcohol Name'} />
+                <ListSeparator
+                  lineColor='black'
+                />
                 {this.renderReviewListItems(alcoholType, queryResults)}
               </List>
               }
@@ -105,7 +109,7 @@ const condition = authUser => !!authUser;
 const ViewReviewForm = compose(
   withRouter,
   withFirebase,
-  withAuthorization(condition)
+  withAuthorization(condition, ROUTES.SIGN_IN)
 )(ViewReviewsFormBase);
 
 export default ViewReviews;
