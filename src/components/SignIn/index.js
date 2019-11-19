@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import {Form, Button, Input} from '@momentum-ui/react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import { PasswordForgetLink } from '../PasswordForget';
 import { SignUpLink } from '../SignUp';
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 import {withAuthorization} from '../Session';
+import { loginAction } from '../../state/auth/actions';
 
 const SignInPage = () => (
   <div className="auth-container">
@@ -41,7 +44,7 @@ class SignInFormBase extends Component {
     this.props.firebase
       .doSignInWithEmailAndPassword(email, password)
       .then((user) => {
-        console.log(user);
+        this.props.dispatchLoginAction(user);
         this.setState({ ...INITIAL_STATE });
         this.props.history.push(ROUTES.HOME);
       })
@@ -96,10 +99,15 @@ const SignInLink = () => (
 
 const condition = authUser => !authUser;
 
+const mapDispatchToProps = (dispatch) => ({
+  dispatchLoginAction: bindActionCreators(loginAction, dispatch),
+});
+
 const SignInForm = compose(
   withRouter,
   withFirebase,
-  withAuthorization(condition, ROUTES.HOME)
+  withAuthorization(condition, ROUTES.HOME),
+  connect(null, mapDispatchToProps),
 )(SignInFormBase);
 
 export default SignInPage;
