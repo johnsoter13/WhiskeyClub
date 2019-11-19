@@ -8,8 +8,6 @@ export const loginAction = (user) => (dispatch) => {
     status: PENDING,
   });
 
-  console.log(user);
-
   return dispatch({
     type: LOGIN,
     status: SUCCESS,

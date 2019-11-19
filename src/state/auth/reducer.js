@@ -1,6 +1,6 @@
 import {produce} from 'immer';
 import { LOGIN, LOGIN_PENDING, LOGIN_SUCCESS } from './constants';
-import { PENDING, SUCCESS,  } from '../constants';
+import { PENDING, SUCCESS } from '../constants';
 
 const initialState = {
   user: {},
