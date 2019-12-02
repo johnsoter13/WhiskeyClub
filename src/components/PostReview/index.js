@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import {withRouter} from 'react-router-dom';
+import {connect} from 'react-redux';
 import {Form, Button, Input, Select, SelectOption} from '@momentum-ui/react';
 import { compose } from 'recompose';
+import moment from 'moment';
 
 import * as ROUTES from '../../constants/routes';
 import {withAuthorization} from '../Session';
 import { withFirebase } from '../Firebase';
 import Navigation from '../Navigation';
+import {selectUser} from '../../state/auth/selectors';
 
 const PostReview = () => (
     <div className="app-container">
@@ -36,11 +39,12 @@ class PostReviewFormBase extends Component {
   
     onSubmit = event => {
       event.preventDefault();
-      let username = "Guest"
+      const username = this.props.user.displayName;
+      const timestamp = moment.now();
 
       const { alcoholType, alcoholRating, review, alcoholName, alcoholBrand} = this.state;
       this.props.firebase
-        .doAddReview({alcoholType, alcoholRating, alcoholName, alcoholBrand, review, username})
+        .doAddReview({alcoholType, alcoholRating, alcoholName, alcoholBrand, review, username, timestamp})
         .then(() => {
           this.setState({ ...INITIAL_STATE });
         })
@@ -119,10 +123,15 @@ class PostReviewFormBase extends Component {
 
 const condition = authUser => !!authUser;
 
+const mapStatetoProps = (state) => ({
+  user: selectUser(state),
+})
+
 const PostReviewForm = compose(
   withRouter,
   withFirebase,
-  withAuthorization(condition, ROUTES.SIGN_IN)
+  withAuthorization(condition, ROUTES.SIGN_IN),
+  connect(mapStatetoProps),
 )(PostReviewFormBase);
 
 export default PostReview;

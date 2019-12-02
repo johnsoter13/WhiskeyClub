@@ -1,9 +1,12 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import AuthUserContext from './context';
 import { withFirebase } from '../Firebase';
+import { loginAction } from '../../state/auth/actions';
 
 const withAuthorization = (condition, route) => Component => {
   class WithAuthorization extends React.Component {
@@ -22,11 +25,13 @@ const withAuthorization = (condition, route) => Component => {
     }
 
     render() {
+      // do it here
       return (
         <AuthUserContext.Consumer>
-            {authUser =>
-            condition(authUser) ? <Component {...this.props} /> : null
-            }
+            {authUser => {
+            this.props.dispatchLoginAction(authUser);
+            return condition(authUser) ? <Component {...this.props} /> : null
+            }}
         </AuthUserContext.Consumer>
 
       );
@@ -36,7 +41,12 @@ const withAuthorization = (condition, route) => Component => {
   return compose(
     withRouter,
     withFirebase,
+    connect(null, mapDispatchToProps),
   )(WithAuthorization);
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  dispatchLoginAction: bindActionCreators(loginAction, dispatch),
+});
 
 export default withAuthorization;
