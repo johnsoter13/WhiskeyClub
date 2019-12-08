@@ -4,7 +4,8 @@
   height: auto;
 }
 
-.review-item-container .review-name {
+.review-item-container .review-name,
+.review-timestamp {
   justify-content: initial;
   max-width: 100px;
   min-width: 100px;
@@ -13,12 +14,7 @@
 .review-item-container .review-rating {
   max-width: 100px;
   min-width: 100px;
-}
-
-.review-brand {
-  justify-content: initial;
-  max-width: 100px;
-  min-width: 100px;
+  text-align: center;
 }
 
 .review-alcohol-name {
@@ -29,13 +25,12 @@
 
 .review-item-container .review-details {
   justify-content: initial;
-  min-width: 300px;
-  max-width: 300px;
+  min-width: 200px;
+  max-width: 200px;
   padding-left: 50px;
 }
 
 .review-details,
-.review-brand,
 .review-name,
 .review-alcohol-name {
   word-break: break-all;

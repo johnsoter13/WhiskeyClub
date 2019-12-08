@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {withRouter} from 'react-router-dom';
 import {List, Select, SelectOption, ListSeparator} from '@momentum-ui/react';
 import { compose } from 'recompose';
+import {orderBy} from 'lodash';
 
 import * as ROUTES from '../../constants/routes';
 import {withAuthorization} from '../Session';
@@ -36,16 +37,16 @@ class ViewReviewsFormBase extends Component {
 
       this.props.firebase.fetchReviewsRef().on('value', snapshot => {
         const allResultsObject = snapshot.val();
-        const results = {};
+        const results = [];
         Object.keys(allResultsObject).map(key => {
-          results[key] = [];
           Object.values(allResultsObject[key]).map(value => {
-            return results[key].push(value)
+            return results.push(value);
           }) 
           return results; 
         });
+        const sortedResults = orderBy(results, ['timestamp'], ['desc']);
 
-        this.setState({queryResults: results, loading: false});
+        this.setState({queryResults: sortedResults, loading: false});
       });
       
     }
@@ -53,18 +54,22 @@ class ViewReviewsFormBase extends Component {
     renderReviewListItems = (alcoholType, results) => {
       const resultListItems = []
 
-      if(!results || (alcoholType !== '' && alcoholType !== 'all' && !results[alcoholType])) {
+      if(!results || (alcoholType !== '' && alcoholType !== 'all' && !results)) {
         return null;
       }
 
       if(!alcoholType || alcoholType === 'all') {
-        Object.keys(results).map(key => (
-          Object.values(results[key]).map(value => (
-            resultListItems.push(<ReviewItem reviewName={value.username} reviewRating={value.alcoholRating} reviewDetails={value.review} reviewBrand={value.alcoholBrand} reviewAlcoholName={value.alcoholName} />)
+          results.map((value) => (
+            resultListItems.push(<ReviewItem reviewName={value.username} reviewRating={value.alcoholRating} reviewDetails={value.review} reviewAlcoholName={value.alcoholName} reviewTimestamp={value.timestamp} />)
           ))
-        ))
       } else {
-        results[alcoholType].map(value => resultListItems.push(<ReviewItem reviewName={value.username} reviewRating={value.alcoholRating} reviewDetails={value.review} reviewBrand={value.alcoholBrand} reviewAlcoholName={value.alcoholName} />))
+        results.map((value) => {
+          if(value.alcoholType === alcoholType) {
+            return resultListItems.push(<ReviewItem reviewName={value.username} reviewRating={value.alcoholRating} reviewDetails={value.review} reviewAlcoholName={value.alcoholName} reviewTimestamp={value.timestamp} />)
+          } else {
+            return null;
+          }
+        })
       }
 
       return resultListItems;
@@ -90,8 +95,8 @@ class ViewReviewsFormBase extends Component {
             </Select>
         
               {queryResults &&
-              <List focusFirst={false}>
-                <ReviewItem reviewName={'Author'} reviewRating={'Rating (0-5)'} reviewDetails={'Review'} reviewBrand={'Brand'} reviewAlcoholName={'Alcohol Name'} />
+              <List className="review-list" focusFirst={false}>
+                <ReviewItem reviewName={'Author'} reviewRating={'Rating (0-5)'} reviewDetails={'Review'} reviewAlcoholName={'Alcohol Name'}/>
                 <ListSeparator
                   lineColor='black'
                 />

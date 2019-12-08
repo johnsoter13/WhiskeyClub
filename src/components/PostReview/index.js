@@ -27,7 +27,6 @@ const INITIAL_STATE = {
     alcoholRating: '',
     review: '',
     alcoholName: '',
-    alcoholBrand: ''
 };
 
 class PostReviewFormBase extends Component {
@@ -42,9 +41,9 @@ class PostReviewFormBase extends Component {
       const username = this.props.user.displayName;
       const timestamp = moment.now();
 
-      const { alcoholType, alcoholRating, review, alcoholName, alcoholBrand} = this.state;
+      const { alcoholType, alcoholRating, review, alcoholName} = this.state;
       this.props.firebase
-        .doAddReview({alcoholType, alcoholRating, alcoholName, alcoholBrand, review, username, timestamp})
+        .doAddReview({alcoholType, alcoholRating, alcoholName, review, username, timestamp})
         .then(() => {
           this.setState({ ...INITIAL_STATE });
         })
@@ -64,9 +63,9 @@ class PostReviewFormBase extends Component {
 
   
     render() {
-      const { alcoholType, alcoholRating, review, alcoholName, alcoholBrand, error } = this.state;
+      const { alcoholType, alcoholRating, review, alcoholName, error } = this.state;
   
-      const isInvalid = alcoholType === '' || alcoholRating === '' || alcoholName === '' || alcoholBrand === '';
+      const isInvalid = alcoholType === '' || alcoholRating === '' || alcoholName === '';
               
       return (
         <Form name="post-review-form" onSubmit={this.onSubmit}>
@@ -88,13 +87,6 @@ class PostReviewFormBase extends Component {
               <SelectOption value='5' label='5 Star' />
             </Select>
           </div>
-          <Input 
-            name="alcoholBrand"
-            value={alcoholBrand}
-            onChange={this.onChange}
-            type="text"
-            placeholder="Alcohol Brand" 
-          />
           <Input 
             name="alcoholName"
             value={alcoholName}
