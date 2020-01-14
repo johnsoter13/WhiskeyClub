@@ -10,9 +10,10 @@ import { withAuthentication } from '../Session/index';
 import * as ROUTES from '../../constants/routes';
 import PostReview from '../PostReview';
 import ViewReviews from '../ViewReviews';
+import {history} from '../../lib/history';
 
 const App = () => (
-  <Router>
+  <Router history={history}>
       <div className="container">
         <Switch>
           <Route path={ROUTES.SIGN_UP} component={SignUpPage} />

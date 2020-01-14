@@ -6,6 +6,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.7.4",
     "@momentum-ui/react": "^23.0.0",
     "firebase": "^6.4.0",
+    "history": "^4.10.1",
     "immer": "^5.0.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
