@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import {Form, Button, Input} from '@momentum-ui/react';
+import {Form, Button, Input, FormSection} from '@momentum-ui/react';
+import { compose } from 'recompose';
+import {withRouter} from 'react-router-dom';
 
 import { withFirebase } from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 import {withAuthorization} from '../Session';
+import { SignInLink } from '../SignIn';
 
 const PasswordForgetPage = () => (
-  <div>
-    <h1>PasswordForget</h1>
-    <PasswordForgetForm />
+  <div className="pw-forget-container">
+    <div className="pw-forget-form">
+      <PasswordForgetForm />
+    </div>
   </div>
 );
 
@@ -31,12 +35,12 @@ class PasswordForgetFormBase extends Component {
     this.props.firebase
       .doPasswordReset(email)
       .then(() => {
-        this.setState({ ...INITIAL_STATE });
+        this.props.history.push(ROUTES.SIGN_IN);
       })
       .catch(error => {
         this.setState({ error });
       });
-
+    
     event.preventDefault();
   };
 
@@ -51,17 +55,21 @@ class PasswordForgetFormBase extends Component {
 
     return (
       <Form onSubmit={this.onSubmit}>
-        <Input
-          name="email"
-          value={this.state.email}
-          onChange={this.onChange}
-          type="text"
-          placeholder="Email Address"
-        />
-        <Button disabled={isInvalid} type="submit">
-          Reset My Password
-        </Button>
-
+        <FormSection title="Password Forget" description="If your email has a valid account, we will send you a link to reset it. (Check your spam folder if you don't see it)">
+          <Input
+            name="email"
+            value={this.state.email}
+            onChange={this.onChange}
+            type="text"
+            placeholder="Email Address"
+          />
+        </FormSection>
+        <div className="pw-forget-form__footer">
+          <SignInLink />
+          <Button disabled={isInvalid} type="submit">
+            Reset My Password
+          </Button>
+        </div>
         {error && <p>{error.message}</p>}
       </Form>
     );
@@ -76,8 +84,11 @@ const PasswordForgetLink = () => (
 
 const condition = authUser => !authUser;
 
-export default withAuthorization(condition, ROUTES.HOME)(PasswordForgetPage);
+const PasswordForgetForm = compose(
+  withFirebase,
+  withRouter,
+  withAuthorization(condition, ROUTES.HOME))(PasswordForgetFormBase);
 
-const PasswordForgetForm = withFirebase(PasswordForgetFormBase);
+export default PasswordForgetPage;
 
 export { PasswordForgetForm, PasswordForgetLink };
