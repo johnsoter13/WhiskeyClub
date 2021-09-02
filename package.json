@@ -7,7 +7,7 @@
     "@momentum-ui/react": "^23.0.0",
     "firebase": "^6.4.0",
     "history": "^4.10.1",
-    "immer": "^5.0.0",
+    "immer": "^9.0.6",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "node-sass": "^4.12.0",
